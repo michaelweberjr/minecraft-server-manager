@@ -105,6 +105,6 @@ dist
 
 # https certificates
 server.key
-server.cer
+server.cert
 
 package-lock.json

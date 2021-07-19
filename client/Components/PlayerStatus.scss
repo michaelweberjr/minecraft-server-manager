@@ -1,0 +1,21 @@
+.playerDiv {
+  width: 500px;
+  margin: 10px 10px;
+  box-shadow: 0 0 10px rgb(63, 63, 65);
+  border-radius: 5px;
+  padding: 10px 10px;
+
+  display:flex;
+  align-items: flex-start;
+  justify-content: flex-start;
+}
+
+.playerList {
+  margin: 10px 10px;
+  box-shadow: 0 0 2px rgb(138, 138, 143);
+  border-radius: 2px;
+
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}

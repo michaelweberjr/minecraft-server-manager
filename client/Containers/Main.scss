@@ -1,0 +1,24 @@
+.mainDiv {
+  width: 800px;
+  
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.serverDiv {
+  width:100%;
+  box-shadow: 0 0 10px rgb(122, 136, 155);
+  border-radius: 5px;
+
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-around;
+}
+
+.toolBar {
+  width: 752px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
