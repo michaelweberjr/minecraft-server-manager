@@ -4,15 +4,14 @@ const fs = require('fs');
 const path = require('path');
 
 var minecraft;
-const minecraftPath = path.resolve(path.resolve(__dirname, '../../'), process.env.MINECRAFT_PATH);
-const players = JSON.parse(fs.readFileSync(path.resolve(minecraftPath, 'usercache.json'))).map(p => p.name);
+const players = JSON.parse(fs.readFileSync(path.resolve(process.env.MINECRAFT_PATH, 'usercache.json'))).map(p => p.name);
 var active = [];
 var inactive = players;
 
 module.exports = {
   start: (req, res, next) => {
     if(minecraft || !res.locals.loggedIn) return next();
-    minecraft = spawn('sudo', ['java', '-Xmx2G', '-jar', path.resolve(minecraftPath,  './' + process.env.FORGE_JAR)], {cwd:minecraftPath});
+    minecraft = spawn('sudo', ['java', '-Xmx2G', '-jar', path.resolve(process.env.MINECRAFT_PATH,  './' + process.env.FORGE_JAR)], {cwd:process.env.MINECRAFT_PATH});
     minecraft.stdout.on('data', parseServerData);
     minecraft.on('close', (code) => `Minecraft server closed with code ${code}`);
     minecraft.on('error', (error) => console.log(`Minecraft process error: ${error}`));

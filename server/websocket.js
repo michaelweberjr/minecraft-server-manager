@@ -8,8 +8,8 @@ const routes = [];
 const basePath = path.resolve(__dirname, '..');
 
 const options = {
-  key: fs.readFileSync(path.resolve(basePath, process.env.SERVER_KEY)),
-  cert: fs.readFileSync(path.resolve(basePath, process.env.SERVER_CERT)),
+  key: fs.readFileSync(process.env.SERVER_KEY),
+  cert: fs.readFileSync(process.env.SERVER_CERT),
 
   secure:true,
 };

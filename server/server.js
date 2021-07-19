@@ -66,6 +66,6 @@ app.use((err, req, res, next) => {
 const basePath = path.resolve(__dirname, '..');
 
 https.createServer({
-  key: fs.readFileSync(path.resolve(basePath, process.env.SERVER_KEY)),
-  cert: fs.readFileSync(path.resolve(basePath, process.env.SERVER_CERT)),
+  key: fs.readFileSync(process.env.SERVER_KEY),
+  cert: fs.readFileSync(process.env.SERVER_CERT),
 }, app).listen(PORT, () => console.log(`Server listening on Port ${PORT}...`));
