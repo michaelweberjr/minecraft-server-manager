@@ -5,8 +5,6 @@ const path = require('path');
 const PORT = Number(process.env.WEBSOCKET_PORT);
 const routes = [];
 
-const basePath = path.resolve(__dirname, '..');
-
 const options = {
   key: fs.readFileSync(process.env.SERVER_KEY),
   cert: fs.readFileSync(process.env.SERVER_CERT),
