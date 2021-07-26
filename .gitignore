@@ -104,8 +104,8 @@ dist
 .tern-port
 
 # https certificates
-server.key
-server.cert
+*.key
+*.cert
 
 package-lock.json
 
