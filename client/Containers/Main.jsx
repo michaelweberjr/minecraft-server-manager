@@ -38,13 +38,13 @@ export const Main = (props) => {
     else if(type === 'join') {
       console.log(`${payload.player} joined`);
       const index = serverStatusGlobal.inactive.indexOf(payload.player);
-      if(index > -1) serverStatusGlobal.inactive = serverStatus.inactive.filter((e, i) => i !== index);
+      if(index > -1) serverStatusGlobal.inactive = serverStatusGlobal.inactive.filter((e, i) => i !== index);
       serverStatusGlobal.active.push(payload.player);
     }
     else if(type === 'left') {
       console.log(`${payload.player} left`);
       const index = serverStatusGlobal.active.indexOf(payload.player);
-      serverStatusGlobal.active = serverStatus.active.filter((e, i) => i !== index);
+      serverStatusGlobal.active = serverStatusGlobal.active.filter((e, i) => i !== index);
       serverStatusGlobal.inactive.push(payload.player);
     }
     else if(type === 'init') {
