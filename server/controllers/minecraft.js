@@ -25,12 +25,17 @@ module.exports = {
     if(!minecraft || !res.locals.loggedIn) return next();
 
     minecraft.stdin.write('stop\n');
-    setTimeout(() => {
+    const killMinecraft = () => {
       minecraft.kill();
-      console.log('Stopped minecraft server...');
-      socket.send('stopped');
-      minecraft = null;
-    }, 2000);
+      if(minecraft.killed) {
+        console.log('Stopped minecraft server...');
+        socket.send('stopped');
+        minecraft = null;
+      }
+      else setTimeout(killMinecraft, 100);
+    }
+
+    setTimeout(killMinecraft, 2000);
     next();
   }
 }
