@@ -14,8 +14,10 @@ export const Download = () => {
 
   return (
     <div className='downloadDiv'>
-      <p>Download the GDLauncher mod pack: </p>
-      <Button color='primary' onClick={handleClick}>Download</Button>
+      <p>Download the mod pack here: </p>
+      {process.env.DOWNLOAD_LOCAL === "true" ? 
+        <Button color='primary' onClick={handleClick}>Download</Button> :
+        <a href={process.env.MODPACK_LINK}>{process.env.MODPACK_NAME}</a>}
     </div>
   );
 }

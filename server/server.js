@@ -5,6 +5,7 @@ const path = require('path');
 const child_process = require('child_process');
 const express = require('express');
 const cookieParser = require("cookie-parser");
+const favicon = require('serve-favicon');
 
 const minecraftController = require('./controllers/minecraft.js');
 const adminController = require('./controllers/admin.js');
@@ -22,8 +23,15 @@ app.get('/', (req, res) => {
   res.status(200).sendFile(path.resolve(__dirname, '../client/index.html'));
 });
 
+app.use(express.static('assets'));
+app.use(favicon(path.resolve(__dirname, '../assets/favicon.ico')));
+
 app.get('/bundle.js', (req, res) => {
   res.status(200).sendFile(path.resolve(__dirname, '../dist/bundle.js'));
+});
+
+app.get('/main', (req, res) => {
+  res.status(200).sendFile(path.resolve(__dirname, '../client/index.html'));
 });
 
 app.post('/start', adminController.validate, minecraftController.start, (req, res) => {
@@ -36,7 +44,7 @@ app.post('/stop', adminController.validate, minecraftController.stop, (req, res)
   else res.status(401).json({message: 'You don\'t have authorization to perform this operation' });
 });
 
-app.get('/' + process.env.MODPACK_NAME, (req, res) => {
+app.get('/' + process.env.MODPACK_LINK, (req, res) => {
   res.status(200).sendFile(path.resolve(__dirname, process.env.MINECRAFT_PATH + '/' + process.env.MODPACK_NAME));
 });
 
@@ -55,7 +63,7 @@ app.get('/session', adminController.validate, (req, res) => {
 });
 
 app.use('*', (req, res) => {
-  res.status(404).send('Cannot find ' + req.url);
+  res.status(404).send('Cannot find ' + req.baseUrl);
 });
 
 app.use((err, req, res, next) => {

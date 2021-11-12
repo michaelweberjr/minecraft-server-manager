@@ -20,6 +20,14 @@ export const Main = (props) => {
   const [serverStatus, setServerStatus] = useState({status:'Unknown', active:[], inactive:[]});
   const [route, setRoute] = useState('/');
 
+  if(!props) return (
+    <Redirect
+      to={{
+        pathname: '/'
+      }}
+    />
+  );
+
   if(route === '/login') {
     socket.removeListener(listenerId);
     return <Redirect to={{ pathname: '/login', state: { admin:props.admin }}}/>

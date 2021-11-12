@@ -20,7 +20,7 @@ const Session = (props) => {
     <Redirect
       to={{
         pathname: '/main',
-        state: { admin:loading.admin, wsURL:loading.wsURL },
+        state: { admin:loading.admin, wsURL:loading.wsURL, session:true },
       }}
     />
   );

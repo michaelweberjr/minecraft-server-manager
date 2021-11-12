@@ -16,6 +16,7 @@ module.exports = {
     minecraft.on('close', (code) => `Minecraft server closed with code ${code}`);
     minecraft.on('error', (error) => console.log(`Minecraft process error: ${error}`));
     console.log('Starting minecraft server...');
+    console.log('[MANAGER] PID ' + minecraft.pid);
     socket.send('start');
 
     next();
@@ -42,7 +43,12 @@ module.exports = {
 
 const parseServerData = (data) => {
   const text = data.toString();
-  if(process.env.DEBUG === 'true') console.log(`[MINECRAFT] ${text}`);
+  if(process.env.DEBUG === 'true') {
+    console.log(`[MINECRAFT] ${text}`);
+  }
+  else if(text.search(/\[minecraft\/DedicatedServer\]/) > -1) {
+    console.log(`[MINECRAFT] ${text}`);
+  }
 
   if(text.search('joined the game') > -1) {
     const words = text.split(' ');
@@ -71,7 +77,7 @@ const parseServerData = (data) => {
       }
     }
   }
-  else if(text.search('Done') > -1) {
+  else if(text.search(/\[minecraft\/DedicatedServer\]:\ Done/) > -1) {
     console.log(`[MINECRAFT] ${text}`);
     socket.send('ready');
   }
