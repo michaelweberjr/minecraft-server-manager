@@ -6,6 +6,7 @@ const child_process = require('child_process');
 const express = require('express');
 const cookieParser = require("cookie-parser");
 const favicon = require('serve-favicon');
+const certificateUpdater = require('./modules/certificateUpdator.js');
 
 const minecraftController = require('./controllers/minecraft.js');
 const adminController = require('./controllers/admin.js');
@@ -67,16 +68,25 @@ app.use('*', (req, res) => {
 });
 
 app.use((err, req, res, next) => {
-  console.log(err.log);
+  console.log('[MANAGER]', err.log);
   res.status(err.status || 500).send(err.message || {error:'Unknown server error occured'});
 });
 
 const basePath = path.resolve(__dirname, '..');
 
-https.createServer({
-  key: fs.readFileSync(process.env.SERVER_KEY),
-  cert: fs.readFileSync(process.env.SERVER_CERT),
-}, app).listen(PORT, () => console.log(`Server listening on Port ${PORT}...`));
+var httpsServer;
+certificateUpdater.register((key, cert) => {
+  if(httpsServer) {
+    httpsServer.close();
+  }
+
+  httpsServer = https.createServer({
+    key,
+    cert,
+  }, app).listen(PORT, () => console.log(`[MANAGER] Server listening on Port ${PORT}...\n`));
+});
+
+certificateUpdater.start();
 
 // redirect http to https
 const httpApp = express();
@@ -87,5 +97,5 @@ httpApp.get('/', (req, res) => {
 });
 
 httpApp.listen(HTTP_PORT, () => {
-  console.log(`http redirect listening on port ${HTTP_PORT}...`);
+  console.log(`[MANAGER] http redirect listening on port ${HTTP_PORT}...\n`);
 });
