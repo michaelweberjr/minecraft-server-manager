@@ -6,7 +6,7 @@ const certificateUpdater = require('./modules/certificateUpdator.js');
 const PORT = Number(process.env.WEBSOCKET_PORT);
 const routes = [];
 
-var socket = {
+const socket = {
   use: (start, ...stops) => {
     routes.push({ start, stops });
   },
@@ -27,9 +27,7 @@ certificateUpdater.register((key, cert) => {
 
   if(socket.server) socket.server.close();
 
-  socket = {
-    server: ws
-      .createServer(options, (conn) => {
+  socket.server = ws.createServer(options, (conn) => {
         conn.on("text", (str) => {
           const msg = JSON.parse(str);
 
@@ -72,8 +70,7 @@ certificateUpdater.register((key, cert) => {
           console.log(`[MANAGER] Errr on connection '${conn.key}': ${err}\n`);
         });
       })
-      .listen(PORT),
-  };
+      .listen(PORT);
 
   socket.server.on("listening", () => {
     console.log(`[MANAGER] Websocket server listnening on port ${PORT}...\n`);

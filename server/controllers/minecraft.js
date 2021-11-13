@@ -111,7 +111,7 @@ socket.use('connect', (req, res) => {
     JSON.stringify({type:'init', payload: {
     status: minecraft.status,
     active: minecraft.active,
-    inactive: minecraft.active, 
+    inactive: minecraft.inactive, 
   }}));
 });
 

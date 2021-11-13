@@ -22,17 +22,21 @@ CertificateUpdator.prototype.register = function(callback) {
 
 CertificateUpdator.prototype.start = function() {
   const certUpdater = () => {
-    const newKey = fs.readFileSync(process.env.SERVER_KEY);
+    try {
+      const newKey = fs.readFileSync(process.env.SERVER_KEY);
 
-    if(updater.key !== newKey) {
-      updater.key = newKey;
-      updater.cert = fs.readFileSync(process.env.SERVER_CERT);
+      if(updater.key !== newKey) {
+        updater.key = newKey;
+        updater.cert = fs.readFileSync(process.env.SERVER_CERT);
 
-      console.log("[MANAGER] Updating certificates\n");
-      this.callbacks.forEach(cb => cb(this.key, this.cert));
-    }
-    else {
-      console.log("[MANAGER] No change in certificates\n");
+        console.log("[MANAGER] Updating certificates\n");
+        this.callbacks.forEach(cb => cb(this.key, this.cert));
+      }
+      else {
+        console.log("[MANAGER] No change in certificates\n");
+      }
+    } catch(error) {
+      console.log("[MANAGER] Caught error when updating certificates: " + error);
     }
   }
 
