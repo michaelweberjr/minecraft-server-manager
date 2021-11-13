@@ -9,8 +9,9 @@ import './Status.scss';
 export const Status = ({status}) => {
   let statusIcon;
   if(status === 'Running') statusIcon = <CheckCircleIcon className='statusIcon' style={{ color: green[500] }} />; 
-  else if(status === 'Started') statusIcon = <HourglassEmptyRoundedIcon className='statusIcon' style={{ color: blue[500] }} />;
-  else statusIcon = <CancelIcon className='statusIcon' style={{ color: red[500] }} />;
+  else if(status === 'Stopped') statusIcon = <CancelIcon className='statusIcon' style={{ color: red[500] }} />;
+  else statusIcon = <HourglassEmptyRoundedIcon className='statusIcon' style={{ color: blue[500] }} />;
+  
 
   return (
     <div className="statusDiv">

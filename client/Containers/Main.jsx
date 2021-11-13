@@ -34,14 +34,8 @@ export const Main = (props) => {
   }
 
   const socketListener = (type, payload, id) => {
-    if(type === 'start') {
-      serverStatusGlobal.status = 'Started';
-    }
-    else if(type === 'stopped') {
-      serverStatusGlobal.status = 'Stopped';
-    }
-    else if(type === 'ready') {
-      serverStatusGlobal.status = 'Running';
+    if(type === 'update') {
+      serverStatusGlobal.status = payload.status;
     }
     else if(type === 'join') {
       console.log(`${payload.player} joined`);
