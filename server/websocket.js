@@ -67,25 +67,25 @@ certificateUpdater.register((key, cert) => {
         });
 
         conn.on("error", (err) => {
-          console.log(`[MANAGER] Errr on connection '${conn.key}': ${err}\n`);
+          console.log(`[MANAGER] Errr on connection '${conn.key}': ${err}`);
         });
       })
       .listen(PORT);
 
   socket.server.on("listening", () => {
-    console.log(`[MANAGER] Websocket server listnening on port ${PORT}...\n`);
+    console.log(`[MANAGER] Websocket server listnening on port ${PORT}...`);
   });
 
   socket.server.on("connection", (conn) => {
-    console.log("[MANAGER] Connection established with ", conn.key, '\n');
+    console.log("[MANAGER] Connection established with ", conn.key);
   });
 
   socket.server.on("close", () => {
-    console.log("[MANAGER] Websocket server has shut down\n");
+    console.log("[MANAGER] Websocket server has shut down");
   });
 
   socket.server.on("error", (e) => {
-    console.log("[MANAGER] Websocket error caught: ", e, '\n');
+    console.log("[MANAGER] Websocket error caught: ", e);
   });
 });
 

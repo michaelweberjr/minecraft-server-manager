@@ -29,29 +29,29 @@ CertificateUpdator.prototype.start = function() {
         updater.key = newKey;
         updater.cert = fs.readFileSync(process.env.SERVER_CERT);
 
-        console.log("[MANAGER] Updating certificates\n");
+        console.log("[UPDATER] Updating certificates");
         this.callbacks.forEach(cb => cb(this.key, this.cert));
       }
       else {
-        console.log("[MANAGER] No change in certificates\n");
+        console.log("[UPDATER] No change in certificates");
       }
     } catch(error) {
-      console.log("[MANAGER] Caught error when updating certificates: " + error);
+      console.log("[UPDATER] Caught error when updating certificates: " + error);
     }
   }
 
-  console.log("[MANAGER] Starting certificate updater\n");
-  console.log("[MANAGER] First time of update:", FIRST_TIME, ", occurs in:", time.toHHMMSS(FIRST_TIME.valueOf() - Date.now()), "\n");
+  console.log("[UPDATER] Starting certificate updater");
+  console.log("[UPDATER] First time of update:", FIRST_TIME, ", occurs in:", time.toHHMMSS(FIRST_TIME.valueOf() - Date.now()));
 
-  console.log("[MANAGER] Starting servers\n");
+  console.log("[UPDATER] Starting servers");
   this.callbacks.forEach(cb => cb(this.key, this.cert));
 
   setTimeout(() => {
-    console.log("[MANAGER] Running certificate updater\n");
+    console.log("[UPDATER] Running certificate updater");
     certUpdater();
 
     setInterval(() => {
-      console.log("[MANAGER] Running certificate updater\n");
+      console.log("[UPDATER] Running certificate updater");
       certUpdater();
     }, INTERVAL)
   }, FIRST_TIME.valueOf() - Date.now());

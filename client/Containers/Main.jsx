@@ -9,7 +9,13 @@ import socket from '../socket.js';
 
 import './Main.scss';
 
-var serverStatusGlobal;
+var serverStatusGlobal = { 
+  status:'Stopped', 
+  active:[], 
+  inactive:[], 
+  currentUpTime: '00:00:00', 
+  totalUpTime: '00:00:00',
+};
 var listenerId;
 
 export const Main = (props) => {
@@ -17,7 +23,7 @@ export const Main = (props) => {
 
   const [adminOverride, setAdmin] = useState(true)
   const [socketStatus, setSocketStatus] = useState('start');
-  const [serverStatus, setServerStatus] = useState({status:'Unknown', active:[], inactive:[]});
+  const [serverStatus, setServerStatus] = useState(serverStatusGlobal);
   const [route, setRoute] = useState('/');
 
   if(!props) return (
@@ -34,10 +40,7 @@ export const Main = (props) => {
   }
 
   const socketListener = (type, payload, id) => {
-    if(type === 'update') {
-      serverStatusGlobal.status = payload.status;
-    }
-    else if(type === 'join') {
+    if(type === 'join') {
       console.log(`${payload.player} joined`);
       const index = serverStatusGlobal.inactive.indexOf(payload.player);
       if(index > -1) serverStatusGlobal.inactive = serverStatusGlobal.inactive.filter((e, i) => i !== index);
@@ -51,11 +54,13 @@ export const Main = (props) => {
     }
     else if(type === 'init') {
       serverStatusGlobal = payload;
+    } else if(type === 'heartbeat') {
+      serverStatusGlobal.status = payload.status;
+      serverStatusGlobal.currentUpTime = payload.currentUpTime;
+      serverStatusGlobal.totalUpTime = payload.totalUpTime;
     }
 
-    if(type !== 'heartbeat') {
-      setServerStatus({...serverStatusGlobal});
-    }
+    setServerStatus({...serverStatusGlobal});
   };
 
   if(socketStatus === 'start') {
@@ -102,7 +107,7 @@ export const Main = (props) => {
         </Toolbar>
       </AppBar>
       <div className='serverDiv'>
-        <Status status={serverStatus.status} />
+        <Status status={serverStatus.status} currentUpTime={serverStatus.currentUpTime} totalUpTime={serverStatus.totalUpTime} />
         <PlayerStatus active={serverStatus.active} inactive={serverStatus.inactive}/>
       </div>
       <Download />

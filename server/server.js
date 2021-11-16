@@ -1,3 +1,5 @@
+console.log(`[MANAGER] Starting minecraft-server-manager [PID:${process.pid}]`);
+
 require('dotenv').config()
 const https = require('https');
 const path = require('path');
@@ -81,7 +83,7 @@ certificateUpdater.register((key, cert) => {
   httpsServer = https.createServer({
     key,
     cert,
-  }, app).listen(PORT, () => console.log(`[MANAGER] Server listening on Port ${PORT}...\n`));
+  }, app).listen(PORT, () => console.log(`[MANAGER] Server listening on Port ${PORT}...`));
 });
 
 certificateUpdater.start();
@@ -95,5 +97,5 @@ httpApp.get('/', (req, res) => {
 });
 
 httpApp.listen(HTTP_PORT, () => {
-  console.log(`[MANAGER] http redirect listening on port ${HTTP_PORT}...\n`);
+  console.log(`[MANAGER] http redirect listening on port ${HTTP_PORT}...`);
 });
