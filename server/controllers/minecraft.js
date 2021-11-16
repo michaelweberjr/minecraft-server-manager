@@ -117,7 +117,6 @@ socket.use('connect', (req, res) => {
 
 const heartbeat = () => {
   socket.send('heartbeat', { status: minecraft.status });
-
-  setTimeout(heartbeat, 10000);
 }
-heartbeat();
+
+setInterval(heartbeat(), 1000);
