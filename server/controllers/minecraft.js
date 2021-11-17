@@ -112,8 +112,8 @@ socket.use('connect', (req, res) => {
     status: minecraft.status,
     active: minecraft.active,
     inactive: minecraft.inactive, 
-    currentUpTime: time.toHHMMSS(minecraft.currentUpTime), 
-    totalUpTime: time.toHHMMSS(minecraft.totalUpTime),
+    currentUpTime: time.toHHMMSS(stats.currentUpTime), 
+    totalUpTime: time.toHHMMSS(stats.totalUpTime),
   }}));
 });
 
