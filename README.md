@@ -17,7 +17,7 @@ SERVER_KEY='sets the server key file for HTTPS'
 SERVER_CERT='sets the server cert file for HTTPS'
 DEBUG='set to true to output all of the minecraft server's output to the console'
 ```
-You can start the manager in a non-closing process with `sh start.sh`
+You can start the manager with `npm start`
 The download file should be in the same folder as `MINECRAFT_PATH`
 
 If you want to make the manager accessable outside of your network you will need to setup port forwarding to the ports. You will also need to supply certificates for the HTTPS protocal.
