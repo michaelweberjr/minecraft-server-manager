@@ -25,9 +25,9 @@ CertificateUpdator.prototype.start = function() {
     try {
       const newKey = fs.readFileSync(process.env.SERVER_KEY);
 
-      if(updater.key !== newKey) {
-        updater.key = newKey;
-        updater.cert = fs.readFileSync(process.env.SERVER_CERT);
+      if(this.key !== newKey) {
+        this.key = newKey;
+        this.cert = fs.readFileSync(process.env.SERVER_CERT);
 
         console.log("[UPDATER] Updating certificates");
         this.callbacks.forEach(cb => cb(this.key, this.cert));
