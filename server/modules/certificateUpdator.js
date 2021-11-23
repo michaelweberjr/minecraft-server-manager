@@ -40,7 +40,7 @@ CertificateUpdator.prototype.start = function() {
     }
   }
 
-  console.log("[UPDATER] Starting certificate updater");
+  console.log(`[UPDATER] [${new Date(Date.now()).toISOString()}] Starting certificate updater`);
   console.log("[UPDATER] First time of update:", FIRST_TIME, ", occurs in:", time.toHHMMSS(FIRST_TIME.valueOf() - Date.now()));
 
   console.log("[UPDATER] Starting servers");
