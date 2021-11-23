@@ -39,6 +39,15 @@ module.exports = {
 
     minecraft.proc.on('close', (code) => {
       console.log(`[MANAGER] Minecraft server closed with code ${code}`);
+      if(minecraft.status !== "Stopping") {
+        minecraft.active.forEach(p => {
+          minecraft.inactive.push(p);
+          socket.send('left', {p});
+        })
+        minecraft.active = [];
+        stats.currentUpTime = 0;
+      }
+      
       minecraft.status = "Stopped";
       minecraft.proc = null;
     });
