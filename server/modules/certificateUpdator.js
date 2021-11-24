@@ -29,7 +29,7 @@ CertificateUpdator.prototype.start = function() {
         this.key = newKey;
         this.cert = fs.readFileSync(process.env.SERVER_CERT);
 
-        console.log("[UPDATER] Updating certificates");
+        console.log(`[UPDATER] Updating certificates`);
         this.callbacks.forEach(cb => cb(this.key, this.cert));
       }
       else {
@@ -47,11 +47,11 @@ CertificateUpdator.prototype.start = function() {
   this.callbacks.forEach(cb => cb(this.key, this.cert));
 
   setTimeout(() => {
-    console.log("[UPDATER] Running certificate updater");
+    console.log(`[UPDATER] [${new Date(Date.now()).toISOString()}] Running certificate updater`);
     certUpdater();
 
     setInterval(() => {
-      console.log("[UPDATER] Running certificate updater");
+      console.log(`[UPDATER] [${new Date(Date.now()).toISOString()}] Running certificate updater`);
       certUpdater();
     }, INTERVAL)
   }, FIRST_TIME.valueOf() - Date.now());
