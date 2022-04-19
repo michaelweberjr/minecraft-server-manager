@@ -22,7 +22,7 @@ const stats = {
 const statsFile = path.resolve(__dirname, '../../stats.json');
 if(fs.existsSync(statsFile)) {
   tempStats = JSON.parse(fs.readFileSync(statsFile));
-  stats.totalUpTime = tempStats.totalUpTime;
+  stats.totalUpTime = tempStats.totalUpTime || 0;
 }
 
 minecraft.inactive = minecraft.players;

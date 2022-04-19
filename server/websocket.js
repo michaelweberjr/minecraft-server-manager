@@ -4,11 +4,15 @@ const path = require('path');
 const certificateUpdater = require('./modules/certificateUpdator.js');
 
 const PORT = Number(process.env.WEBSOCKET_PORT);
-const routes = [];
+const routes = {
+  stops: [],
+  types: {}
+};
 
 const socket = {
-  use: (start, ...stops) => {
-    routes.push({ start, stops });
+  use: (type, ...stops) => {
+    routes.stops.push(stops);
+    routes.types[type] = routes.stops.length - 1;
   },
 
   send: (type, payload) => {
@@ -28,49 +32,36 @@ certificateUpdater.register((key, cert) => {
   if(socket.server) socket.server.close();
 
   socket.server = ws.createServer(options, (conn) => {
-        conn.on("text", (str) => {
-          const msg = JSON.parse(str);
+    conn.on("text", (str) => {
+      const msg = JSON.parse(str);
 
-          let routeIndex = -1;
-          for (let i = 0; i < routes.length; i++) {
-            if (routes[i].start === msg.type) {
-              routeIndex = i;
-              break;
-            }
-          }
+      const routeIndex = routes.types[msg.type] !== undefined ? routes.types[msg.type] : -1;
+      if (routeIndex === -1)
+        conn.send(
+          JSON.stringify({
+            type: "error",
+            payload: { error: "Unknown message type" },
+          })
+        );
+      else
+        dispatcher(
+          msg.payload,
+          { conn, locals: {} },
+          ...routes.stops[routeIndex]
+        );
+    });
 
-          if (routeIndex === -1)
-            conn.send(
-              JSON.stringify({
-                type: "error",
-                payload: { error: "Unknown message type" },
-              })
-            );
-          else
-            dispatcher(
-              msg.payload,
-              { conn, locals: {} },
-              ...routes[routeIndex].stops
-            );
-        });
+    conn.on("close", (code, reason) => {
+      const routeIndex = routes.types["close"] !== undefined ? routes.types["close"] : -1;
+      if (routeIndex !== -1)
+        dispatcher({}, { conn, locals: {} }, ...routes[routeIndex].stops);
+    });
 
-        conn.on("close", (code, reason) => {
-          let routeIndex = -1;
-          for (let i = 0; i < routes.length; i++) {
-            if (routes[i].start === "close") {
-              routeIndex = i;
-              break;
-            }
-          }
-          if (routeIndex !== -1)
-            dispatcher({}, { conn, locals: {} }, ...routes[routeIndex].stops);
-        });
-
-        conn.on("error", (err) => {
-          console.log(`[MANAGER] Errr on connection '${conn.key}': ${err}`);
-        });
-      })
-      .listen(PORT);
+    conn.on("error", (err) => {
+      console.log(`[MANAGER] Errr on connection '${conn.key}': ${err}`);
+    });
+  })
+  .listen(PORT);
 
   socket.server.on("listening", () => {
     console.log(`[MANAGER] Websocket server listnening on port ${PORT}...`);
