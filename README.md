@@ -1,7 +1,7 @@
 # minecraft-server-manager
 Provides a react app for running a minecraft server. For setting up the server you will need to provide a '.env' file with following options set:
 ```
-FORJE_JAR='name of jar file that starts the server'
+FORGE_JAR='name of jar file that starts the server'
 MINECRAFT_PATH='path to the minecraft server'
 ADMIN_NAME='username for logging in as an admin'
 ADMIN_PWS='password for logging in as an admin'
