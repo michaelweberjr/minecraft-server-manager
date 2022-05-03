@@ -45,6 +45,11 @@ app.post('/stop', adminController.validate, minecraftController.stop, (req, res)
   else res.status(401).json({message: 'You don\'t have authorization to perform this operation' });
 });
 
+app.post('/cmd', adminController.validate, minecraftController.cmd, (req, res) => {
+  if(res.locals.loggedIn) res.status(200).json({message: 'Minecraft server executed command'});
+  else res.status(401).json({message: 'You don\'t have authorization to perform this operation' });
+});
+
 app.get('/' + process.env.MODPACK_LINK, (req, res) => {
   res.status(200).sendFile(path.resolve(__dirname, process.env.MINECRAFT_PATH + '/' + process.env.MODPACK_NAME));
 });
@@ -68,7 +73,7 @@ app.use('*', (req, res) => {
 });
 
 app.use((err, req, res, next) => {
-  console.log('[MANAGER]', err.log);
+  console.log('[MANAGER]', err.log || err);
   res.status(err.status || 500).send(err.message || {error:'Unknown server error occured'});
 });
 

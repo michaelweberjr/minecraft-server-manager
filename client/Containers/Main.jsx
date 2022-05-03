@@ -111,7 +111,7 @@ export const Main = (props) => {
         <PlayerStatus active={serverStatus.active} inactive={serverStatus.inactive}/>
       </div>
       <Download />
-      {props.admin && adminOverride && <Admin />}
+      {props.admin && adminOverride && <Admin status={serverStatus.status}/>}
     </div>
   );
 }

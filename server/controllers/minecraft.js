@@ -70,7 +70,15 @@ module.exports = {
     minecraft.proc.stdin.write('stop\n');
 
     next();
-  }
+  },
+
+  cmd: (req, res, next) => {
+    if(minecraft.status !== "Running" || typeof(req.body.cmd) !== 'string' || !res.locals.loggedIn) return next();
+    console.log(`[MANAGER] Executing minecraft command: ${req.body.cmd}`);
+    minecraft.proc.stdin.write(req.body.cmd + '\n');
+
+    next();
+  },
 };
 
 const parseServerData = (data) => {
