@@ -1,12 +1,13 @@
 {
   "name": "minecraft-server-manager",
-  "version": "1.2.0",
+  "version": "1.4.0",
   "description": "manages running a minecraft server",
   "main": "index.js",
   "scripts": {
     "dev": "NODE_ENV=development; nodemon server/server.js & webpack serve",
     "start": "NODE_ENV=production; webpack & node server/server.js",
-    "sustart": "NODE_ENV=production; webpack & sudo node server/server.js"
+    "sustart": "NODE_ENV=production; webpack & sudo node server/server.js",
+    "rebuild": "NODE_ENV=production; webpack"
   },
   "keywords": [
     "minecraft"
