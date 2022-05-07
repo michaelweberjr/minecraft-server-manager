@@ -7,12 +7,25 @@ const time = require('../modules/timeIntervalFormat.js');
 const minecraft = {
   proc: null,
   status: 'Stopped',
-  players: JSON.parse(fs.readFileSync(path.resolve(process.env.MINECRAFT_PATH, 'usercache.json'))).map(p => p.name),
+  players: [],
   active: [],
   inactive: [],
   startTime: 0,
   endCount: 0,
 };
+
+try {
+  minecraft.players = JSON.parse(fs.readFileSync(path.resolve(process.env.MINECRAFT_PATH, 'usercache.json'))).map(p => p.name);
+} catch(e) {
+  minecraft.players = [];
+}
+
+try {
+  const eulaText = fs.readFileSync(path.resolve(process.env.MINECRAFT_PATH, "eula.txt"), {encoding:'utf-8'});
+  if(eulaText.toLowerCase().search('true') < 0) throw 'Go to file write';
+} catch(e) {
+  fs.writeFileSync(path.resolve(process.env.MINECRAFT_PATH, 'eula.txt'), "eula=true");
+}
 
 const stats = {
   currentUpTime: 0,
@@ -83,12 +96,9 @@ module.exports = {
 
 const parseServerData = (data) => {
   const text = data.toString();
-  if(process.env.DEBUG === 'true') {
+  if(process.env.DEBUG === 'true'
+    || text.search(/\[minecraft\/DedicatedServer\]/) > -1 || text.search(/\main\/FATAL\]\ \[minecraft\/Main\]/) > -1) {
     console.log(`[MINECRAFT] ${text}`);
-    socket.send("minecraft/update", {msg:text}, conn => conn.locals.admin);
-  }
-  else if(text.search(/\[minecraft\/DedicatedServer\]/) > -1 || text.search(/\main\/FATAL\]\ \[minecraft\/Main\]/) > -1) {
-    console.log(`[MINECRAFT] ${text.trim()}`);
     socket.send("minecraft/update", {msg:text}, conn => conn.locals.admin);
   }
 
