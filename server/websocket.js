@@ -15,8 +15,8 @@ const socket = {
     routes.types[type] = routes.stops.length - 1;
   },
 
-  send: (type, payload) => {
-    if(socket.server) socket.server.connections.forEach(conn => {
+  send: (type, payload, validate = () => true) => {
+    if(socket.server) socket.server.connections.filter(validate).forEach(conn => {
       conn.send(JSON.stringify({type, payload: payload}));
     });
   }
@@ -69,6 +69,7 @@ certificateUpdater.register((key, cert) => {
 
   socket.server.on("connection", (conn) => {
     console.log("[MANAGER] Connection established with ", conn.key);
+    conn.locals = {};
   });
 
   socket.server.on("close", () => {

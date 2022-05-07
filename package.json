@@ -1,6 +1,6 @@
 {
   "name": "minecraft-server-manager",
-  "version": "1.4.0",
+  "version": "1.4.1",
   "description": "manages running a minecraft server",
   "main": "index.js",
   "scripts": {

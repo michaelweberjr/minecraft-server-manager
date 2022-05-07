@@ -13,7 +13,7 @@ export const Login = (props) => {
   const [route, setRoute] = useState('/');
 
   if(route === '/main') {
-    return <Redirect to={{ pathname: '/main', state: { admin:props.admin }}}/>
+    return <Redirect to={{ pathname: '/main', state: { admin:props.admin, token:props.token }}}/>
   }
 
   const login = () => {
@@ -24,6 +24,7 @@ export const Login = (props) => {
       .then(res => res.json())
       .then(data => {
         props.admin = data.admin;
+        props.token = data.token;
         setRoute('/main');
       })
       .catch(error => console.log('Error in server:' + error.message));

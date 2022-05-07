@@ -55,7 +55,7 @@ app.get('/' + process.env.MODPACK_LINK, (req, res) => {
 });
 
 app.post('/login', adminController.login, (req, res) => {
-  if(res.locals.loggedIn) res.status(200).json({admin:true});
+  if(res.locals.loggedIn) res.status(200).json({admin:true, token:res.locals.token});
   else res.status(401).json({admin:false});
 });
 
@@ -65,7 +65,7 @@ app.post('/logout', adminController.logout, (req, res) => {
 
 const wsURL = 'wss://' + process.env.DOMAIN + ':' + process.env.WEBSOCKET_PORT + '/';
 app.get('/session', adminController.validate, (req, res) => {
-  res.status(200).json({admin:res.locals.loggedIn === true, wsURL});
+  res.status(200).json({admin:res.locals.loggedIn === true, wsURL, token:res.locals.token});
 });
 
 app.use('*', (req, res) => {

@@ -85,9 +85,11 @@ const parseServerData = (data) => {
   const text = data.toString();
   if(process.env.DEBUG === 'true') {
     console.log(`[MINECRAFT] ${text}`);
+    socket.send("minecraft/update", {msg:text}, conn => conn.locals.admin);
   }
   else if(text.search(/\[minecraft\/DedicatedServer\]/) > -1 || text.search(/\main\/FATAL\]\ \[minecraft\/Main\]/) > -1) {
     console.log(`[MINECRAFT] ${text.trim()}`);
+    socket.send("minecraft/update", {msg:text}, conn => conn.locals.admin);
   }
 
   if(text.search('joined the game') > -1) {
@@ -99,7 +101,7 @@ const parseServerData = (data) => {
         minecraft.inactive = minecraft.inactive.filter(p => p !== player);
         minecraft.active.push(player);
         console.log(`[MANAGER] ${player} has joined the server`);
-        socket.send('join', {player});
+        socket.send('minecraft/join', {player});
         break;
       }
     }
@@ -112,7 +114,7 @@ const parseServerData = (data) => {
         minecraft.active = minecraft.active.filter(p => p !== player);
         minecraft.inactive.push(player);
         console.log(`[MANAGER] ${player} has left the server`);
-        socket.send('left', {player});
+        socket.send('minecraft/left', {player});
         break;
       }
     }
@@ -125,7 +127,7 @@ const parseServerData = (data) => {
 
 socket.use('connect', (req, res) => {
   res.conn.send(
-    JSON.stringify({type:'init', payload: {
+    JSON.stringify({type:'minecraft/init', payload: {
     status: minecraft.status,
     active: minecraft.active,
     inactive: minecraft.inactive, 

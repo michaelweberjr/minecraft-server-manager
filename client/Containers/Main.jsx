@@ -40,24 +40,26 @@ export const Main = (props) => {
   }
 
   const socketListener = (type, payload, id) => {
-    if(type === 'join') {
+    if(type === 'minecraft/join') {
       console.log(`${payload.player} joined`);
       const index = serverStatusGlobal.inactive.indexOf(payload.player);
       if(index > -1) serverStatusGlobal.inactive = serverStatusGlobal.inactive.filter((e, i) => i !== index);
       serverStatusGlobal.active.push(payload.player);
     }
-    else if(type === 'left') {
+    else if(type === 'minecraft/left') {
       console.log(`${payload.player} left`);
       const index = serverStatusGlobal.active.indexOf(payload.player);
       serverStatusGlobal.active = serverStatusGlobal.active.filter((e, i) => i !== index);
       serverStatusGlobal.inactive.push(payload.player);
     }
-    else if(type === 'init') {
+    else if(type === 'minecraft/init') {
       serverStatusGlobal = payload;
     } else if(type === 'heartbeat') {
       serverStatusGlobal.status = payload.status;
       serverStatusGlobal.currentUpTime = payload.currentUpTime;
       serverStatusGlobal.totalUpTime = payload.totalUpTime;
+    } else if(type === 'minecraft/update') {
+      console.log(`${payload.msg}`);
     }
 
     setServerStatus({...serverStatusGlobal});
@@ -81,11 +83,17 @@ export const Main = (props) => {
     }
   }
 
+  if(props.token && socket.connected) {
+    socket.sendEvent('admin/login', { token:props.token });
+    delete props.token;
+  }
+
   const logout = () => {
     fetch('/logout', { method:'POST' })
       .then(res => res.json())
       .then(data => setAdmin(data.admin))
       .catch(error => console.log('Error in server:' + error.message));
+    socket.sendEvent('admin/logout');
   }
 
   if(socketStatus !== 'ready')
